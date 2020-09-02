@@ -1,0 +1,472 @@
+{
+    "Resources": {
+        "vpclab": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "CidrBlock": "10.0.0.0/16",
+                "EnableDnsHostnames": "True",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "lab"
+                    }
+                ]
+            }
+        },
+        "PublicNet1": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": "cn-northwest-1a",
+                "VpcId": {
+                    "Ref": "vpclab"
+                },
+                "CidrBlock": "10.0.1.0/24",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "PublicNet1"
+                    }
+                ]
+            }
+            
+        },
+        "PublicNet2": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": "cn-northwest-1b",
+                "VpcId": {
+                    "Ref": "vpclab"
+                },
+                "CidrBlock": "10.0.2.0/24",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "PublicNet2"
+                    }
+                ]
+            }
+            
+        },
+        "PrivateNet1": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": "cn-northwest-1a",
+                "VpcId": {
+                    "Ref": "vpclab"
+                },
+                "CidrBlock": "10.0.3.0/24",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "PrivateNet1"
+                    }
+                ]
+            }
+            
+        },
+        "PrivateNet2": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": "cn-northwest-1b",
+                "VpcId": {
+                    "Ref": "vpclab"
+                },
+                "CidrBlock": "10.0.4.0/24",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "PrivateNet2"
+                    }
+                ]
+            }
+            
+        },
+        "PublicRoute": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "vpclab"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "PUblicRoute"
+                    }
+                ]
+            }
+            
+        },
+        "PrivateRoute2": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "vpclab"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "PRivateRoute"
+                    }
+                ]
+            }
+            
+        },
+        "labIGW": {
+            "Type": "AWS::EC2::InternetGateway",
+            "Properties": {
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "lab"
+                    }
+                ]
+            }
+            
+        },
+        "AttachGateway": {
+            "Type": "AWS::EC2::VPCGatewayAttachment",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "vpclab"
+                },
+                "InternetGatewayId": {
+                    "Ref": "labIGW"
+                }
+            }
+            
+        },
+        "Nat": {
+            "DependsOn" : "EIP",
+            "Type": "AWS::EC2::NatGateway",
+            "Properties": {
+                "AllocationId": {
+                    "Fn::GetAtt": [
+                        "EIP",
+                        "AllocationId"
+                    ]
+                },
+                "SubnetId": {
+                    "Ref": "PublicNet1"
+                }
+            }
+            
+        },
+        "EIP": {
+            "Type": "AWS::EC2::EIP",
+            "Properties": {
+                "Domain": "vpc"
+            }
+        },
+
+        "Public": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PublicRoute"
+                },
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "GatewayId": {
+                    "Ref": "labIGW"
+                }
+            }
+        },
+        "Private": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PrivateRoute2"
+                },
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "NatGatewayId": {
+                    "Ref": "Nat"
+                }
+            }
+        },
+        "SubnetAssociation1": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PublicRoute"
+                },
+                "SubnetId": {
+                    "Ref": "PublicNet1"
+                }
+            }
+        },
+        "SubnetAssociation2": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PublicRoute"
+                },
+                "SubnetId": {
+                    "Ref": "PublicNet2"
+                }
+            }
+         
+        },
+        "SubnetAssociation3": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PrivateRoute2"
+                },
+                "SubnetId": {
+                    "Ref": "PrivateNet1"
+                }
+            }
+           
+        },
+        "SubnetAssociation4": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PrivateRoute2"
+                },
+                "SubnetId": {
+                    "Ref": "PrivateNet2"
+                }
+            }
+            
+        },
+        
+        "InstanceGroup" : {
+          "Type" : "AWS::EC2::SecurityGroup",
+          "Properties":{
+            "GroupDescription":"WebGroup",
+            "GroupName":"WebGroup",
+            "VpcId" : {
+                "Ref":"vpclab"
+            },
+            "Tags":[
+                {
+                    "Key":"Name",
+                    "Value":"WebGroup"
+                }
+            ]
+            }
+        },
+
+        "GroupIngress":{
+            "Type":"AWS::EC2::SecurityGroupIngress",
+            "Properties":{
+                "CidrIp":"0.0.0.0/0",
+                "FromPort":80,
+                "IpProtocol":"tcp",
+                "ToPort":80,
+                "GroupId":{
+                    "Ref":"InstanceGroup"
+                }
+             
+            }
+        },
+
+        
+        "ALB":{
+            "Type" : "AWS::ElasticLoadBalancingV2::LoadBalancer",
+            "Properties" :{
+                "IpAddressType":"ipv4",
+                "Name":"ALB",
+                "SecurityGroups":[
+                    {
+                        "Ref":"InstanceGroup"
+                    }
+                ],
+                "Subnets" :[
+                    {
+                        "Ref":"PublicNet1"
+                    },
+                    {
+                        "Ref":"PublicNet2"
+                    }
+                ],
+                "Tags":[
+                    {
+                        "Key":"Name",
+                        "Value":"ALB"
+                    }
+                ],
+                "Type":"application"
+            }
+        },
+
+        "listener":{
+            "Type":"AWS::ElasticLoadBalancingV2::Listener",
+            "Properties":{
+                "Port":80,
+                "Protocol":"HTTP",
+                "LoadBalancerArn":{
+                    "Ref":"ALB"
+                },
+                "DefaultActions":[
+                    {
+                        "Type":"forward",
+                        "TargetGroupArn":{
+                            "Ref":"Tg"
+                        }
+                    }
+                ]
+            }
+        },
+
+
+
+        "Tg":{
+            "DependsOn":["ALB"],
+            "Type":"AWS::ElasticLoadBalancingV2::TargetGroup",
+            "Properties":{
+                "HealthCheckEnabled" : "True",
+                "HealthCheckIntervalSeconds" : "6",
+                "HealthCheckPort":80,
+                "HealthCheckProtocol":"HTTP",
+                "Name":"Tg",
+                "Port":80,
+                "Protocol":"HTTP",
+                "Tags":[
+                    {
+                        "Key":"Name",
+                        "Value":"TG"
+                    }
+                ],
+                "TargetType":"instance",
+                "VpcId":{
+                    "Ref":"vpclab"
+                }
+                }
+
+            },
+            
+            "ASGGroup" : {
+                "Type" : "AWS::AutoScaling::AutoScalingGroup",
+                
+                "Properties" : {
+                    "VPCZoneIdentifier" : [
+                        {
+                            "Ref":"PrivateNet1",
+                            "Ref":"PrivateNet2" 
+                        }
+                    ],
+                    "AutoScalingGroupName":"ASG",
+                    "TargetGroupARNs":[{
+                        "Ref":"Tg"
+                    }],
+                    "LaunchConfigurationName" : {
+                        "Ref":"AWSconfigure"
+                    },
+                    "MaxSize" : "2",
+                    "MinSize" : "1",
+                    "Tags" : [ {"Key" : "Name",
+                                "Value" : "ASG",
+                                "PropagateAtLaunch" : "True"} 
+                            ]
+                }
+            },
+
+            "AWSconfigure":{
+                "Type":"AWS::AutoScaling::LaunchConfiguration",
+                "Properties":{
+                    "SecurityGroups":[
+                        {
+                        "Ref":"InstanceGroup"
+                    }
+                ],
+                    "ImageId":"ami-0934e7d625575bb7c",
+                    "InstanceType":"t2.micro",
+                    "LaunchConfigurationName":"ASG",
+                    "UserData":{
+                        "Fn::Base64":{
+                            "Fn::Sub":"#!/bin/bash -ex \n yum install httpd -y  \nyum update -y \nsystemctl start httpd \necho 'hello'> /var/www/html/index.html"
+                        }
+                    }
+                }
+            },
+
+            "Policy":{
+                "Type":"AWS::AutoScaling::ScalingPolicy",
+                "Properties":{
+                    "PolicyType":"StepScaling",
+                    
+                    "AdjustmentType":"ChangeInCapacity",
+                    "AutoScalingGroupName":{
+                        "Ref":"ASGGroup"
+                    },
+                    "EstimatedInstanceWarmup":60,
+                    "StepAdjustments":[
+                        {
+                            "MetricIntervalLowerBound":60,
+                            "ScalingAdjustment":1
+                        },
+                        {
+                            "MetricIntervalLowerBound":0,
+                            "MetricIntervalUpperBound":20,
+                            "ScalingAdjustment":1
+                        },
+                        {
+                            "MetricIntervalLowerBound":20,
+                            "MetricIntervalUpperBound":60,
+                            "ScalingAdjustment":0
+                        }
+                    ]
+                }
+            },
+
+            "ALarmHigh":{
+                "Type":"AWS::CloudWatch::Alarm",
+                "Properties":{
+                    "AlarmDescription":"cloudwatch1",
+                    "AlarmName":"asg cloudwatch1",
+                    "MetricName":"CPUUtlilization",
+                    "Namespace": "AWS/EC2",
+                    "Statistic":"Average",
+                    "Period":60,
+                    "EvaluationPeriods":1,
+                    "Threshold":60,
+                    "Dimensions":[
+                        {
+                            "Name":"AutoScalingGroupName",
+                            "Value":{
+                                "Ref":"ASGGroup"
+                            }
+                        }
+                    ],
+                    "ComparisonOperator":"GreaterThanThreshold",
+                    "AlarmActions":[
+                        {
+                            "Ref":"Policy"
+                        }
+                    ]
+                }
+            },
+
+            "AlarmLow":{
+                "Type":"AWS::CloudWatch::Alarm",
+                "Properties":{
+                    "AlarmDescription":"cloudwatch2",
+                    "AlarmName":"asg cloudwatch2",
+                    "MetricName":"CPUUtlilization",
+                    "Namespace": "AWS/EC2",
+                    "Statistic":"Average",
+                    "Period":60,
+                    "EvaluationPeriods":1,
+                    "Threshold":20,
+                    "Dimensions":[
+                        {
+                            "Name":"AutoScalingGroupName",
+                            "Value":{
+                                "Ref":"ASGGroup"
+                            }
+                        }
+                    ],
+                    "ComparisonOperator":"GreaterThanThreshold",
+                    "AlarmActions":[
+                        {
+                            "Ref":"Policy"
+                        }
+                    ]
+                }
+            }
+    }       
+}
+        
+
+           
