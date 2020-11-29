@@ -1,0 +1,821 @@
+{
+  "Resources": {
+    "webserverEE139216": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "lab/webserver"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/Resource"
+      }
+    },
+    "webserverPublicNetSubnet1SubnetE97BBC12": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/24",
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "AvailabilityZone": "cn-northwest-1a",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "PublicNet"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/PublicNetSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/PublicNetSubnet1/Subnet"
+      }
+    },
+    "webserverPublicNetSubnet1RouteTable9BE28358": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/PublicNetSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/PublicNetSubnet1/RouteTable"
+      }
+    },
+    "webserverPublicNetSubnet1RouteTableAssociationB1CCBDEB": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "webserverPublicNetSubnet1RouteTable9BE28358"
+        },
+        "SubnetId": {
+          "Ref": "webserverPublicNetSubnet1SubnetE97BBC12"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/PublicNetSubnet1/RouteTableAssociation"
+      }
+    },
+    "webserverPublicNetSubnet1DefaultRouteEE6C6592": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "webserverPublicNetSubnet1RouteTable9BE28358"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "webserverIGWEFAC546B"
+        }
+      },
+      "DependsOn": [
+        "webserverVPCGWC5FB8484"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/PublicNetSubnet1/DefaultRoute"
+      }
+    },
+    "webserverPublicNetSubnet2Subnet0F4E5DA9": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.1.0/24",
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "AvailabilityZone": "cn-northwest-1b",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "PublicNet"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/PublicNetSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/PublicNetSubnet2/Subnet"
+      }
+    },
+    "webserverPublicNetSubnet2RouteTable7BA3E624": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/PublicNetSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/PublicNetSubnet2/RouteTable"
+      }
+    },
+    "webserverPublicNetSubnet2RouteTableAssociation1C73B99D": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "webserverPublicNetSubnet2RouteTable7BA3E624"
+        },
+        "SubnetId": {
+          "Ref": "webserverPublicNetSubnet2Subnet0F4E5DA9"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/PublicNetSubnet2/RouteTableAssociation"
+      }
+    },
+    "webserverPublicNetSubnet2DefaultRoute212E64BA": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "webserverPublicNetSubnet2RouteTable7BA3E624"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "webserverIGWEFAC546B"
+        }
+      },
+      "DependsOn": [
+        "webserverVPCGWC5FB8484"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/PublicNetSubnet2/DefaultRoute"
+      }
+    },
+    "webserverPublicNetSubnet3Subnet701A02CD": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.2.0/24",
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "AvailabilityZone": "cn-northwest-1c",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "PublicNet"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/PublicNetSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/PublicNetSubnet3/Subnet"
+      }
+    },
+    "webserverPublicNetSubnet3RouteTableC8743932": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/PublicNetSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/PublicNetSubnet3/RouteTable"
+      }
+    },
+    "webserverPublicNetSubnet3RouteTableAssociation6385A27E": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "webserverPublicNetSubnet3RouteTableC8743932"
+        },
+        "SubnetId": {
+          "Ref": "webserverPublicNetSubnet3Subnet701A02CD"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/PublicNetSubnet3/RouteTableAssociation"
+      }
+    },
+    "webserverPublicNetSubnet3DefaultRoute4DA58F44": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "webserverPublicNetSubnet3RouteTableC8743932"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "webserverIGWEFAC546B"
+        }
+      },
+      "DependsOn": [
+        "webserverVPCGWC5FB8484"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/PublicNetSubnet3/DefaultRoute"
+      }
+    },
+    "webserverPrivateNetSubnet1Subnet8B0B3528": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.3.0/24",
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "AvailabilityZone": "cn-northwest-1a",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "PrivateNet"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated"
+          },
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/PrivateNetSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/PrivateNetSubnet1/Subnet"
+      }
+    },
+    "webserverPrivateNetSubnet1RouteTableEC6519E3": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/PrivateNetSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/PrivateNetSubnet1/RouteTable"
+      }
+    },
+    "webserverPrivateNetSubnet1RouteTableAssociation312BEC77": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "webserverPrivateNetSubnet1RouteTableEC6519E3"
+        },
+        "SubnetId": {
+          "Ref": "webserverPrivateNetSubnet1Subnet8B0B3528"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/PrivateNetSubnet1/RouteTableAssociation"
+      }
+    },
+    "webserverPrivateNetSubnet2Subnet20155DA0": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.4.0/24",
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "AvailabilityZone": "cn-northwest-1b",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "PrivateNet"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated"
+          },
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/PrivateNetSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/PrivateNetSubnet2/Subnet"
+      }
+    },
+    "webserverPrivateNetSubnet2RouteTable043DDFA7": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/PrivateNetSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/PrivateNetSubnet2/RouteTable"
+      }
+    },
+    "webserverPrivateNetSubnet2RouteTableAssociation984CA40F": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "webserverPrivateNetSubnet2RouteTable043DDFA7"
+        },
+        "SubnetId": {
+          "Ref": "webserverPrivateNetSubnet2Subnet20155DA0"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/PrivateNetSubnet2/RouteTableAssociation"
+      }
+    },
+    "webserverPrivateNetSubnet3Subnet834357E6": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.5.0/24",
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "AvailabilityZone": "cn-northwest-1c",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "PrivateNet"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated"
+          },
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/PrivateNetSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/PrivateNetSubnet3/Subnet"
+      }
+    },
+    "webserverPrivateNetSubnet3RouteTableEF6B9F3B": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/PrivateNetSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/PrivateNetSubnet3/RouteTable"
+      }
+    },
+    "webserverPrivateNetSubnet3RouteTableAssociation9752E7D4": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "webserverPrivateNetSubnet3RouteTableEF6B9F3B"
+        },
+        "SubnetId": {
+          "Ref": "webserverPrivateNetSubnet3Subnet834357E6"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/PrivateNetSubnet3/RouteTableAssociation"
+      }
+    },
+    "webserverDataBaseSubnet1Subnet0B68B10D": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.6.0/24",
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "AvailabilityZone": "cn-northwest-1a",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "DataBase"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated"
+          },
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/DataBaseSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/DataBaseSubnet1/Subnet"
+      }
+    },
+    "webserverDataBaseSubnet1RouteTable49BEA06B": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/DataBaseSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/DataBaseSubnet1/RouteTable"
+      }
+    },
+    "webserverDataBaseSubnet1RouteTableAssociationA251BE28": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "webserverDataBaseSubnet1RouteTable49BEA06B"
+        },
+        "SubnetId": {
+          "Ref": "webserverDataBaseSubnet1Subnet0B68B10D"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/DataBaseSubnet1/RouteTableAssociation"
+      }
+    },
+    "webserverDataBaseSubnet2SubnetF4ABEABB": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.7.0/24",
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "AvailabilityZone": "cn-northwest-1b",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "DataBase"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated"
+          },
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/DataBaseSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/DataBaseSubnet2/Subnet"
+      }
+    },
+    "webserverDataBaseSubnet2RouteTableEAC1AAE2": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/DataBaseSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/DataBaseSubnet2/RouteTable"
+      }
+    },
+    "webserverDataBaseSubnet2RouteTableAssociation9977C091": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "webserverDataBaseSubnet2RouteTableEAC1AAE2"
+        },
+        "SubnetId": {
+          "Ref": "webserverDataBaseSubnet2SubnetF4ABEABB"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/DataBaseSubnet2/RouteTableAssociation"
+      }
+    },
+    "webserverDataBaseSubnet3Subnet77B8F4EA": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.8.0/24",
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "AvailabilityZone": "cn-northwest-1c",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "DataBase"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated"
+          },
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/DataBaseSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/DataBaseSubnet3/Subnet"
+      }
+    },
+    "webserverDataBaseSubnet3RouteTable7005914D": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/DataBaseSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/DataBaseSubnet3/RouteTable"
+      }
+    },
+    "webserverDataBaseSubnet3RouteTableAssociationD83D6B98": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "webserverDataBaseSubnet3RouteTable7005914D"
+        },
+        "SubnetId": {
+          "Ref": "webserverDataBaseSubnet3Subnet77B8F4EA"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/DataBaseSubnet3/RouteTableAssociation"
+      }
+    },
+    "webserverEFSSubnet1SubnetB34FD7BE": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.9.0/24",
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "AvailabilityZone": "cn-northwest-1a",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "EFS"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated"
+          },
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/EFSSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/EFSSubnet1/Subnet"
+      }
+    },
+    "webserverEFSSubnet1RouteTable571EE0B6": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/EFSSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/EFSSubnet1/RouteTable"
+      }
+    },
+    "webserverEFSSubnet1RouteTableAssociationB66E44A2": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "webserverEFSSubnet1RouteTable571EE0B6"
+        },
+        "SubnetId": {
+          "Ref": "webserverEFSSubnet1SubnetB34FD7BE"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/EFSSubnet1/RouteTableAssociation"
+      }
+    },
+    "webserverEFSSubnet2SubnetF8D08331": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.10.0/24",
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "AvailabilityZone": "cn-northwest-1b",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "EFS"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated"
+          },
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/EFSSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/EFSSubnet2/Subnet"
+      }
+    },
+    "webserverEFSSubnet2RouteTableF003F640": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/EFSSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/EFSSubnet2/RouteTable"
+      }
+    },
+    "webserverEFSSubnet2RouteTableAssociation65F26E02": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "webserverEFSSubnet2RouteTableF003F640"
+        },
+        "SubnetId": {
+          "Ref": "webserverEFSSubnet2SubnetF8D08331"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/EFSSubnet2/RouteTableAssociation"
+      }
+    },
+    "webserverEFSSubnet3SubnetCEDF5ED3": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.11.0/24",
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "AvailabilityZone": "cn-northwest-1c",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "EFS"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated"
+          },
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/EFSSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/EFSSubnet3/Subnet"
+      }
+    },
+    "webserverEFSSubnet3RouteTableF2FAAB2F": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "lab/webserver/EFSSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/EFSSubnet3/RouteTable"
+      }
+    },
+    "webserverEFSSubnet3RouteTableAssociation5B5E7CA7": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "webserverEFSSubnet3RouteTableF2FAAB2F"
+        },
+        "SubnetId": {
+          "Ref": "webserverEFSSubnet3SubnetCEDF5ED3"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/EFSSubnet3/RouteTableAssociation"
+      }
+    },
+    "webserverIGWEFAC546B": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "lab/webserver"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/IGW"
+      }
+    },
+    "webserverVPCGWC5FB8484": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "webserverEE139216"
+        },
+        "InternetGatewayId": {
+          "Ref": "webserverIGWEFAC546B"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/webserver/VPCGW"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Modules": "aws-cdk=1.72.0,@aws-cdk/assets=1.72.0,@aws-cdk/aws-applicationautoscaling=1.72.0,@aws-cdk/aws-autoscaling-common=1.72.0,@aws-cdk/aws-certificatemanager=1.72.0,@aws-cdk/aws-cloudwatch=1.72.0,@aws-cdk/aws-codeguruprofiler=1.72.0,@aws-cdk/aws-ec2=1.72.0,@aws-cdk/aws-efs=1.72.0,@aws-cdk/aws-elasticloadbalancingv2=1.72.0,@aws-cdk/aws-events=1.72.0,@aws-cdk/aws-iam=1.72.0,@aws-cdk/aws-kms=1.72.0,@aws-cdk/aws-lambda=1.72.0,@aws-cdk/aws-logs=1.72.0,@aws-cdk/aws-route53=1.72.0,@aws-cdk/aws-s3=1.72.0,@aws-cdk/aws-s3-assets=1.72.0,@aws-cdk/aws-sqs=1.72.0,@aws-cdk/aws-ssm=1.72.0,@aws-cdk/cloud-assembly-schema=1.72.0,@aws-cdk/core=1.72.0,@aws-cdk/cx-api=1.72.0,@aws-cdk/region-info=1.72.0,jsii-runtime=Python/3.8.6"
+      },
+      "Metadata": {
+        "aws:cdk:path": "lab/CDKMetadata/Default"
+      }
+    }
+  }
+}
